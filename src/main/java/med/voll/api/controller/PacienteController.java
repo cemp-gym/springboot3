@@ -1,5 +1,6 @@
 package med.voll.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import med.voll.api.domain.direccion.DatosDireccion;
 import med.voll.api.domain.paciente.*;
@@ -16,6 +17,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/pacientes")
+@SecurityRequirement(name = "bearer-key")
 public class PacienteController {
 
     @Autowired
@@ -47,7 +49,7 @@ public class PacienteController {
     // Emitir una lista paginada de datos previamente mapeados.
     @GetMapping
     public ResponseEntity<Page<DatosListadoPaciente>> listadoPaciente(@PageableDefault(size = 20) Pageable paginacion) {
-        return ResponseEntity.ok(pacienteRepository.findByActivoTrue(paginacion).map(DatosListadoPaciente::new));
+        return ResponseEntity.ok(pacienteRepository.findAllByActivoTrue(paginacion).map(DatosListadoPaciente::new));
     }
 
     // Actualizar los datos del paciente por Id en el repositorio (Base de Datos)
